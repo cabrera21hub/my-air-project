@@ -140,7 +140,6 @@ const Clima = () => {
                     </MapView>
                 </View>
 
-                <AirQualityScale />
 
                 <View style={styles.container}>
                     <Text style={styles.title}>Tendencia de Calidad del Aire</Text>
