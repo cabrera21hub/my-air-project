@@ -36,6 +36,15 @@ const Clima = () => {
         return 'Peligroso';
     };
 
+    const getAirQualityColor = (aqi) => {
+        if (aqi <= 50) return '#00e400';
+        if (aqi <= 100) return '#ffff00';
+        if (aqi <= 150) return '#ff7e00';
+        if (aqi <= 200) return '#ff0000';
+        if (aqi <= 300) return '#8f3f97';
+        return '#7e0023';
+    };
+
     const Card = ({ fecha, iko, condicion, min, max }) => {
         return (
             <View style={[styles.vContainer, { justifyContent: 'space-between' }]}>
@@ -80,6 +89,8 @@ const Clima = () => {
 
     const LScreen = () => {
         const airQualityLevel = airQuality ? getAirQualityLevel(airQuality.aqius) : '';
+        const airQualityColor = airQuality ? getAirQualityColor(airQuality.aqius) : '#000';
+        const textColor = airQualityColor === '#ffff00' ? '#000' : '#FFF';
 
         return (
             <ScrollView style={styles.scrollContainer}>
@@ -99,6 +110,14 @@ const Clima = () => {
                         </View>
                     </View>
                 </View>
+
+                {/* Mostrar calidad del aire actual */}
+                {airQuality && (
+                    <View style={[styles.container, { backgroundColor: airQualityColor }]}>
+                        <Text style={styles.title}>Calidad del Aire Actual</Text>
+                        <Text style={[styles.datosBold, { color: textColor }]}>{`AQI: ${airQuality.aqius} - ${airQualityLevel}`}</Text>
+                    </View>
+                )}
 
                 <View style={styles.mapContainer}>
                     <MapView
@@ -121,13 +140,7 @@ const Clima = () => {
                     </MapView>
                 </View>
 
-                {/* Mostrar calidad del aire actual */}
-                {airQuality && (
-                    <View style={styles.container}>
-                        <Text style={styles.title}>Calidad del Aire Actual</Text>
-                        <Text style={styles.datosBold}>AQI: {airQuality.aqius} - {airQualityLevel}</Text>
-                    </View>
-                )}
+                <AirQualityScale />
 
                 <View style={styles.container}>
                     <Text style={styles.title}>Tendencia de Calidad del Aire</Text>
@@ -135,8 +148,6 @@ const Clima = () => {
                         <ChartScreen />
                     </View>
                 </View>
-
-                <AirQualityScale />
 
                 <View style={styles.container}>
                     <Text style={styles.title}>Pronóstico de 5 días</Text>
